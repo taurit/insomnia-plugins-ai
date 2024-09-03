@@ -10,9 +10,12 @@ It supports displaying multiple images (one below another, with a scrollbar) for
 
 ## Supported endpoints:
 
-- AUTOMATIC1111's [Stable Diffusion Web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) txt2img API:
+- [AUTOMATIC1111 Stable Diffusion Web UI](https://github.com/AUTOMATIC1111/stable-diffusion-webui) txt2img API:
     - `POST http://localhost:7860/sdapi/v1/txt2img`
+- [OpenAI Dall-E API](https://platform.openai.com/docs/api-reference/images/create):
+    - `POST https://api.openai.com/v1/images/generations`
 
+**Please note:** For the OpenAI API, the `"response_format": "b64_json"` [option](https://platform.openai.com/docs/api-reference/images/create) must be set, because otherwise the authentication to download generated images from the storage is tricky.
 
 ## Known issues
 
