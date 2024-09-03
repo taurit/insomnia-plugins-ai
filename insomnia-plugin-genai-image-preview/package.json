@@ -1,0 +1,17 @@
+{
+  "name": "insomnia-plugin-genai-image-preview",
+  "version": "0.1.0",
+  "main": "index.js",
+  "insomnia": {
+    "name": "genai-image-preview",
+    "displayName": "GenAI Image Preview",
+    "description": "Preview images returned by the GenAI endpoints like Stable Diffusion Web UI or Dall-E API.",
+    "images": {
+      "icon": "icon.svg"
+    },
+    "publisher": {
+      "name": "Tim Taurit",
+      "icon": "https://avatars.githubusercontent.com/u/7702278?v=4&size=256"
+    }
+  }
+}
