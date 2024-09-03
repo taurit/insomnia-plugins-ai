@@ -1,6 +1,7 @@
 {
   "name": "insomnia-plugin-genai-image-preview",
   "version": "0.1.2",
+  "description": "A plugin for Insomnia that previews images returned by GenAI endpoints like Stable Diffusion Web UI or Dall-E API.",
   "main": "index.js",
   "insomnia": {
     "name": "genai-image-preview",
@@ -13,5 +14,32 @@
       "name": "Tim Taurit",
       "icon": "https://avatars.githubusercontent.com/u/7702278?v=4&size=256"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taurit/insomnia-plugins-ai"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Tim Taurit",
+    "url": "https://github.com/taurit"
+  },
+  "homepage": "https://github.com/taurit/insomnia-plugins-ai#readme",
+  "bugs": {
+    "url": "https://github.com/taurit/insomnia-plugins-ai/issues"
+  },
+  "keywords": [
+    "insomnia",
+    "plugin",
+    "genai",
+    "image-preview",
+    "stable-diffusion",
+    "dall-e"
+  ],
+  "files": [
+    "index.js",
+    "icon.svg",
+    "README.md",
+    "screenshot.jpg"
+  ]
 }
