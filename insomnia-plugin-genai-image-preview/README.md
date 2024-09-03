@@ -2,7 +2,7 @@
 
 This plugin opens a preview dialog displaying images returned by the GenAI endpoints.
 
-![A screenshot of an opened dialog window in Insomnia](./screenshot.jpg)
+![A screenshot of an opened dialog window in Insomnia](https://raw.githubusercontent.com/taurit/insomnia-plugins-ai/main/screenshots/insomnia-plugin-genai-image-preview.jpg)
 
 Without this plugin, you only see a JSON with Base64-encoded images in the response.
 

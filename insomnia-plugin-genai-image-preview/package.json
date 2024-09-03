@@ -35,11 +35,5 @@
     "image-preview",
     "stable-diffusion",
     "dall-e"
-  ],
-  "files": [
-    "index.js",
-    "icon.svg",
-    "README.md",
-    "screenshot.jpg"
   ]
 }
