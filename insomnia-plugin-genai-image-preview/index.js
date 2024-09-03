@@ -1,3 +1,8 @@
+// *************************************
+// insomnia-plugin-genai-image-preview
+// See README.md for more information
+// *************************************
+
 module.exports.responseHooks = [
   (context) => {
     // first sanity check to see if this plugin should be activated
@@ -8,10 +13,13 @@ module.exports.responseHooks = [
     if (isJson) {
       TryHandleStableDiffusionResponse(context);
       TryHandleOpenAiResponse(context);
+
+      // otherwise do nothing, i.e. don't display any dialog - request seems unrelated to Generative AI image generation
     }
   },
 ];
 
+// Checks whether response seem to be from Stable Diffusion Web UI API, and if it is, displays image preview in a dialog
 function TryHandleStableDiffusionResponse(context) {
   // a typical URL for Stable Diffusion local URL is http://localhost:7860/sdapi/v1/txt2img
   let isStableDiffusionApi = context.request
@@ -25,12 +33,13 @@ function TryHandleStableDiffusionResponse(context) {
   DisplayImagesInDialog(context, base64Images);
 }
 
+// Checks whether response seem to be from OpenAI Image Generation API, and if it is, displays image preview in a dialog
 function TryHandleOpenAiResponse(context) {
   // a typical URL for Stable Diffusion local URL is https://api.openai.com/v1/images/generations
-  let isStableDiffusionApi = context.request
+  let isOpenAIApi = context.request
     .getUrl()
     .includes("api.openai.com/v1/images/generations");
-  if (!isStableDiffusionApi) return;
+  if (!isOpenAIApi) return;
 
   const responseBody = context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
@@ -47,12 +56,12 @@ function TryHandleOpenAiResponse(context) {
   if (!responseBodyJson.data) return;
   // sanity check: user requested response as base64, not URL (which is unsupported because of authentication difficulties)
   if (!responseBodyJson.data[0].b64_json) return;
-
   const base64Images = responseBodyJson.data.map((item) => item.b64_json);
 
   DisplayImagesInDialog(context, base64Images);
 }
 
+// Opens a dialog with images
 function DisplayImagesInDialog(context, base64Images) {
   if (base64Images) {
     var container = document.createElement("div");
