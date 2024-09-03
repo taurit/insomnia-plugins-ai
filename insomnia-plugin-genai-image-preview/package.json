@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/taurit/insomnia-plugins-ai"
+    "url": "git+https://github.com/taurit/insomnia-plugins-ai.git"
   },
   "license": "MIT",
   "author": {
