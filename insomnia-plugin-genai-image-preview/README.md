@@ -14,8 +14,13 @@ It supports displaying multiple images (one below another, with a scrollbar) for
     - `POST http://localhost:7860/sdapi/v1/txt2img`
 - [OpenAI Dall-E API](https://platform.openai.com/docs/api-reference/images/create):
     - `POST https://api.openai.com/v1/images/generations`
+    
+    **Please note:** For the OpenAI API, the `"response_format": "b64_json"` [option](https://platform.openai.com/docs/api-reference/images/create) must be set, because otherwise the authentication to download generated images from the storage is tricky.
 
-**Please note:** For the OpenAI API, the `"response_format": "b64_json"` [option](https://platform.openai.com/docs/api-reference/images/create) must be set, because otherwise the authentication to download generated images from the storage is tricky.
+- [SwarmUI API](https://github.com/mcmonkeyprojects/SwarmUI/blob/master/docs/API.md):
+    - `POST http://localhost:7801/API/GenerateText2Image`
+
+    **Please note:** For the SwarmUI API, the `"donotsave": true` option must be set in request's payload so the API immediately returns the language content.
 
 ## Known issues
 
@@ -37,7 +42,7 @@ I personally reduced the number of response history items stored, and it seemed 
 
 ## Contribution
 
-My personal usage of Generative AI Image APIs is limited to **Stable Diffusion** and **Dall-E**, and I'm unlikely to spontaneously add support for other endpoints.
+My personal usage of Generative AI Image APIs is limited to **Stable Diffusion**, **Dall-E** and **SwarmUI**, and I'm unlikely to spontaneously add support for other endpoints.
 
 If you want to see something else supported, then please:
 

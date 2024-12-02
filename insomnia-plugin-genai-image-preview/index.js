@@ -11,6 +11,7 @@ module.exports.responseHooks = [
       .includes("application/json");
 
     if (isJson) {
+      TryHandleSwarmUIResponse(context);
       TryHandleStableDiffusionResponse(context);
       TryHandleOpenAiResponse(context);
 
@@ -26,6 +27,19 @@ function TryHandleStableDiffusionResponse(context) {
     .getUrl()
     .includes("sdapi/v1/txt2img");
   if (!isStableDiffusionApi) return;
+
+  const responseBody = context.response.getBody();
+  const responseBodyJson = JSON.parse(responseBody);
+  const base64Images = responseBodyJson.images;
+  DisplayImagesInDialog(context, base64Images);
+}
+
+function TryHandleSwarmUIResponse(context) {
+  // a typical URL for Swarm UI local URL is http://localhost:7801/API/GenerateText2Image
+  let isSwarmUIApi = context.request
+    .getUrl()
+    .includes("API/GenerateText2Image");
+  if (!isSwarmUIApi) return;
 
   const responseBody = context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
@@ -67,11 +81,20 @@ function DisplayImagesInDialog(context, base64Images) {
     var container = document.createElement("div");
 
     for (let i = 0; i < base64Images.length; i++) {
-      const image = document.createElement("img");
+      const imageTag = document.createElement("img");
+      const imageContent = base64Images[i];
 
-      image.src = `data:image/png;base64,${base64Images[i]}`;
+      // some images, like from SwarmUI, already contain the `data:image/png;base64` prefix included
+      // if they don't, we add it here
+      const imageContentStandardized = imageContent.startsWith(
+        "data:image/png;base64,"
+      )
+        ? imageContent
+        : `data:image/png;base64,${imageContent}`;
 
-      container.appendChild(image);
+      imageTag.src = imageContentStandardized;
+
+      container.appendChild(imageTag);
       container.appendChild(document.createElement("br"));
     }
 
