@@ -44,6 +44,19 @@ function TryHandleSwarmUIResponse(context) {
   const responseBody = context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
   const base64Images = responseBodyJson.images;
+
+  // if response suggests is containst relative URL, and not embedded image, ignore it
+  // example  of such response:
+  // {
+  //"images": [
+  //	"View/local/raw/2024-12-02/1803-MyImage-Fluxflux1-dev-fp8-162527447454229.webp"
+  //]}
+  if (base64Images[0].startsWith("View")) return;
+  if (base64Images[0].endsWith(".webp")) return;
+  if (base64Images[0].endsWith(".jpg")) return;
+  if (base64Images[0].endsWith(".png")) return;
+  if (base64Images[0].endsWith(".jpeg")) return;
+
   DisplayImagesInDialog(context, base64Images);
 }
 
@@ -84,20 +97,22 @@ function DisplayImagesInDialog(context, base64Images) {
       const imageTag = document.createElement("img");
       const imageContent = base64Images[i];
 
-      // some images, like from SwarmUI, already contain the `data:image/png;base64` prefix included
-      // if they don't, we add it here
-      const imageContentStandardized = imageContent.startsWith(
-        "data:image/png;base64,"
-      )
-        ? imageContent
-        : `data:image/png;base64,${imageContent}`;
+      if (imageContent) {
+        // some images, like from SwarmUI, already contain the `data:image/png;base64` prefix included
+        // if they don't, we add it here
+        const imageContentStandardized = imageContent.startsWith("data:image")
+          ? imageContent
+          : `data:image/png;base64,${imageContent}`;
 
-      imageTag.src = imageContentStandardized;
+        imageTag.src = imageContentStandardized;
 
-      container.appendChild(imageTag);
-      container.appendChild(document.createElement("br"));
+        container.appendChild(imageTag);
+        container.appendChild(document.createElement("br"));
+      }
     }
 
-    context.app.dialog("GenAI Image Preview", container);
+    if (container.children.length !== 0) {
+      context.app.dialog("GenAI Image Preview", container);
+    }
   }
 }
