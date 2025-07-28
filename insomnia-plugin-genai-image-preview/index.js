@@ -8,7 +8,7 @@ module.exports.responseHooks = [
     // first sanity check to see if this plugin should be activated
     let isJson = context.response
       .getHeader("Content-Type")
-      .includes("application/json");
+      ?.includes("application/json");
 
     if (isJson) {
       TryHandleSwarmUIResponse(context);
