@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-genai-image-preview",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A plugin for Insomnia that previews images returned by GenAI endpoints like Stable Diffusion Web UI, SwarmUI and Dall-E API.",
   "main": "index.js",
   "insomnia": {
