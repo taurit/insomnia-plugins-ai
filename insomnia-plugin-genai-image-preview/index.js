@@ -4,44 +4,46 @@
 // *************************************
 
 module.exports.responseHooks = [
-  (context) => {
-    // first sanity check to see if this plugin should be activated
-    let isJson = context.response
-      .getHeader("Content-Type")
-      ?.includes("application/json");
+  async (context) => {
+    try {
+      // first sanity check to see if this plugin should be activated
+      const contentType = context.response.getHeader("Content-Type");
+      const isJson = contentType?.includes("application/json");
 
-    if (isJson) {
-      TryHandleSwarmUIResponse(context);
-      TryHandleStableDiffusionResponse(context);
-      TryHandleOpenAiResponse(context);
-
-      // otherwise do nothing, i.e. don't display any dialog - request seems unrelated to Generative AI image generation
+      if (isJson) {
+        await TryHandleSwarmUIResponse(context);
+        await TryHandleStableDiffusionResponse(context);
+        await TryHandleOpenAiResponse(context);
+      }
+    } catch (error) {
+      console.error("GenAI Image Preview plugin error:", error);
     }
+    // Do not return any value to avoid interfering with the response
   },
 ];
 
 // Checks whether response seem to be from Stable Diffusion Web UI API, and if it is, displays image preview in a dialog
-function TryHandleStableDiffusionResponse(context) {
+async function TryHandleStableDiffusionResponse(context) {
   // a typical URL for Stable Diffusion local URL is http://localhost:7860/sdapi/v1/txt2img
   let isStableDiffusionApi = context.request
     .getUrl()
     .includes("sdapi/v1/txt2img");
   if (!isStableDiffusionApi) return;
 
-  const responseBody = context.response.getBody();
+  const responseBody = await context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
   const base64Images = responseBodyJson.images;
   DisplayImagesInDialog(context, base64Images);
 }
 
-function TryHandleSwarmUIResponse(context) {
+async function TryHandleSwarmUIResponse(context) {
   // a typical URL for Swarm UI local URL is http://localhost:7801/API/GenerateText2Image
   let isSwarmUIApi = context.request
     .getUrl()
     .includes("API/GenerateText2Image");
   if (!isSwarmUIApi) return;
 
-  const responseBody = context.response.getBody();
+  const responseBody = await context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
   const base64Images = responseBodyJson.images;
 
@@ -61,14 +63,14 @@ function TryHandleSwarmUIResponse(context) {
 }
 
 // Checks whether response seem to be from OpenAI Image Generation API, and if it is, displays image preview in a dialog
-function TryHandleOpenAiResponse(context) {
+async function TryHandleOpenAiResponse(context) {
   // a typical URL for Stable Diffusion local URL is https://api.openai.com/v1/images/generations
   let isOpenAIApi = context.request
     .getUrl()
     .includes("api.openai.com/v1/images/generations");
   if (!isOpenAIApi) return;
 
-  const responseBody = context.response.getBody();
+  const responseBody = await context.response.getBody();
   const responseBodyJson = JSON.parse(responseBody);
 
   // convert response json to array of strings containing base64 images. Response has format like:
